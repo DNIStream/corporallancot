@@ -3,9 +3,9 @@
 const ActionHandlerBase = require("@actionHandlers/actionHandlerBase");
 
 module.exports = class QuoteActionHandler extends ActionHandlerBase {
-  constructor({ logger, notesActionPersistenceHandler }) {
+  constructor({ logger, notesPersistenceHandler }) {
     super(logger, "quote");
-    this.persistenceHandler = notesActionPersistenceHandler;
+    this.persistenceHandler = notesPersistenceHandler;
     this.help = "`!quote <search>` finds a note (if `search` is omitted, I'll just find a random note).";
   }
 

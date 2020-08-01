@@ -2,8 +2,8 @@ version: "3.1"
 
 services:
   db:
-    image: mariadb:10.5.3
-    container_name: ${BOT_DB_SERVER}
+    image: mariadb:10.5.4
+    container_name: corporallancot.db
     ports:
       - "${BOT_DB_LOCAL_PORT}:3306"
     restart: "no"
@@ -26,7 +26,10 @@ services:
     restart: "no"
     environment:
       BOT_DISCORD_KEY: ${BOT_DISCORD_KEY}
+      BOT_TWITCH_CLIENTID: ${BOT_TWITCH_CLIENTID}
+      BOT_TWITCH_CLIENTSECRET: ${BOT_TWITCH_CLIENTSECRET}
+      BOT_TWITCH_CHANNEL: ${BOT_TWITCH_CHANNEL}
       BOT_DB_SERVER: ${BOT_DB_SERVER}
-      BOT_DB_NAME: ${MYSQL_DATABASE}
-      BOT_DB_USER: ${MYSQL_USER}
-      BOT_DB_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}

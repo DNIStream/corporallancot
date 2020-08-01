@@ -42,11 +42,91 @@ describe("appConfig", function () {
     expect(discordEntry.settings.key).toBe(expectedValue);
   });
 
-  it("sets environment BOT_DB_NAME to database.name", function () {
+  it("sets environment BOT_TWITCH_CLIENTID to twitch.clientId", function () {
+    // Arrange
     const expectedValue = faker.lorem.word();
     const configFilePath = "config.json";
     const environment = {
-      BOT_DB_NAME: expectedValue
+      BOT_TWITCH_CLIENTID: expectedValue
+    };
+
+    // Act
+    const appConfig = AppConfig({ configFilePath, environment });
+
+    // Assert
+    const twitchEntry = appConfig.bot.chatListeners.find(x => x.name === "twitch");
+    expect(twitchEntry.settings.clientId).toBe(expectedValue);
+  });
+
+  it("sets environment BOT_TWITCH_CLIENTSECRET to twitch.clientSecret", function () {
+    // Arrange
+    const expectedValue = faker.lorem.word();
+    const configFilePath = "config.json";
+    const environment = {
+      BOT_TWITCH_CLIENTSECRET: expectedValue
+    };
+
+    // Act
+    const appConfig = AppConfig({ configFilePath, environment });
+
+    // Assert
+    const twitchEntry = appConfig.bot.chatListeners.find(x => x.name === "twitch");
+    expect(twitchEntry.settings.clientSecret).toBe(expectedValue);
+  });
+
+  it("sets environment BOT_TWITCH_ACCESSTOKEN to twitch.accessToken", function () {
+    // Arrange
+    const expectedValue = faker.lorem.word();
+    const configFilePath = "config.json";
+    const environment = {
+      BOT_TWITCH_ACCESSTOKEN: expectedValue
+    };
+
+    // Act
+    const appConfig = AppConfig({ configFilePath, environment });
+
+    // Assert
+    const twitchEntry = appConfig.bot.chatListeners.find(x => x.name === "twitch");
+    expect(twitchEntry.settings.accessToken).toBe(expectedValue);
+  });
+
+  it("sets environment BOT_TWITCH_REFRESHTOKEN to twitch.refreshToken", function () {
+    // Arrange
+    const expectedValue = faker.lorem.word();
+    const configFilePath = "config.json";
+    const environment = {
+      BOT_TWITCH_REFRESHTOKEN: expectedValue
+    };
+
+    // Act
+    const appConfig = AppConfig({ configFilePath, environment });
+
+    // Assert
+    const twitchEntry = appConfig.bot.chatListeners.find(x => x.name === "twitch");
+    expect(twitchEntry.settings.refreshToken).toBe(expectedValue);
+  });
+
+  it("sets environment BOT_TWITCH_CHANNEL to twitch.channel", function () {
+    // Arrange
+    const expectedValue = faker.lorem.word();
+    const configFilePath = "config.json";
+    const environment = {
+      BOT_TWITCH_CHANNEL: expectedValue
+    };
+
+    // Act
+    const appConfig = AppConfig({ configFilePath, environment });
+
+    // Assert
+    const twitchEntry = appConfig.bot.chatListeners.find(x => x.name === "twitch");
+    expect(twitchEntry.settings.channel).toBe(expectedValue);
+  });
+
+  it("sets environment MYSQL_DATABASE to database.name", function () {
+    const expectedValue = faker.lorem.word();
+    const configFilePath = "config.json";
+    const environment = {
+      MYSQL_DATABASE: expectedValue
     };
     const appConfig = AppConfig({ configFilePath, environment });
     expect(appConfig.database.name).toBe(expectedValue);
@@ -62,21 +142,21 @@ describe("appConfig", function () {
     expect(appConfig.database.server).toBe(expectedValue);
   });
 
-  it("sets environment BOT_DB_USER to database.user", function () {
+  it("sets environment MYSQL_USER to database.user", function () {
     const expectedValue = faker.lorem.word();
     const configFilePath = "config.json";
     const environment = {
-      BOT_DB_USER: expectedValue
+      MYSQL_USER: expectedValue
     };
     const appConfig = AppConfig({ configFilePath, environment });
     expect(appConfig.database.user).toBe(expectedValue);
   });
 
-  it("sets environment BOT_DB_PASSWORD to database.password", function () {
+  it("sets environment MYSQL_PASSWORD to database.password", function () {
     const expectedValue = faker.lorem.word();
     const configFilePath = "config.json";
     const environment = {
-      BOT_DB_PASSWORD: expectedValue
+      MYSQL_PASSWORD: expectedValue
     };
     const appConfig = AppConfig({ configFilePath, environment });
     expect(appConfig.database.password).toBe(expectedValue);

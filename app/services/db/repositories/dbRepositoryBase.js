@@ -9,13 +9,16 @@ module.exports = class RepositoryBase {
     this.dbAdapter = dbAdapter;
     this.logPrefix = `[${subClassName}] `;
 
-    // init() is called at least once each time the repository is instantiated
+    // init() is called exactly once each time the repository is instantiated.
+    // Repositories should therefore be injected as singletons to avoid multiple
+    // connection and creation attempts.
     (async () => {
-      await this
-        .init()
-        .catch((e) => {
-          this.logger.log(`${this.logPrefix}A fatal error occurred when initialising the repository:\n`, e);
-        });
+      try {
+        await this.init();
+      } catch (e) {
+        this.logger.log(`${this.logPrefix}A fatal error occurred when initialising the repository:\n`, e);
+        process.exit();
+      }
     })();
   }
 

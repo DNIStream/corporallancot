@@ -7,10 +7,10 @@ const Container = require('@root/container');
 
 // Resolve the bot dependency and call its init() method asynchronously to start the app
 (async () => {
-  await Container.cradle.bot
-    .init()
-    .catch((e) => {
-      Container.cradle.logger.log("Halt! A fatal error occurred:\n", e);
-      process.exit();
-    });
+  try {
+    await Container.cradle.bot.init();
+  } catch (e) {
+    Container.cradle.logger.log("Halt! A fatal error occurred:\n", e);
+    process.exit();
+  }
 })();

@@ -1,28 +1,27 @@
 'use strict';
 
-const NotesActionPersistenceHandler = require("@actionPersistenceHandlers/notes/notesActionPersistenceHandler");
+const NotesPersistenceHandler = require("@persistenceHandlers/notes/notesPersistenceHandler");
 const faker = require('faker');
 
-describe("notesActionPersistenceHandler", () => {
+describe("notesPersistenceHandler", () => {
   const logger = {
     log: function () { }
   };
 
   it("sets logger to .logger property", () => {
-    const handler = new NotesActionPersistenceHandler({ logger });
+    const handler = new NotesPersistenceHandler({ logger });
     expect(handler.logger).toBe(logger);
   });
 
   it("sets notesRepository to .repository property", () => {
-    const notesRepository = {};
-    const handler = new NotesActionPersistenceHandler({ logger, notesRepository });
+    const notesRepository = jasmine.createSpy("notesRepository");
+    const handler = new NotesPersistenceHandler({ logger, notesRepository });
     expect(handler.repository).toBe(notesRepository);
   });
 
-  it("sets logPrefix to square-bracketed constructor name with space suffix", () => {
-    const notesRepository = {};
-    const handler = new NotesActionPersistenceHandler({ logger, notesRepository });
-    expect(handler.logPrefix).toBe("[NotesActionPersistenceHandler] ");
+  it("sets logPrefix to [constructor.name] with space suffix", () => {
+    const handler = new NotesPersistenceHandler({ logger});
+    expect(handler.logPrefix).toBe("[NotesPersistenceHandler] ");
   });
 
   //////////////////
@@ -40,7 +39,7 @@ describe("notesActionPersistenceHandler", () => {
     const message = faker.lorem.sentence();
     const server = faker.lorem.word();
 
-    const handler = new NotesActionPersistenceHandler({ logger, notesRepository });
+    const handler = new NotesPersistenceHandler({ logger, notesRepository });
 
     // Act
     await handler.insertNote(timestamp, userID, channelID, nick, message, server);
@@ -56,7 +55,7 @@ describe("notesActionPersistenceHandler", () => {
     var notesRepository = jasmine.createSpyObj("notesRepository", ["insertNote"])
     notesRepository.insertNote.and.returnValue(expectedResult);
 
-    const handler = new NotesActionPersistenceHandler({ logger, notesRepository });
+    const handler = new NotesPersistenceHandler({ logger, notesRepository });
 
     // Act & Assert
     await expectAsync(handler.insertNote()).toBeResolvedTo(expectedResult);
@@ -71,7 +70,7 @@ describe("notesActionPersistenceHandler", () => {
     var notesRepository = jasmine.createSpyObj("notesRepository", ["getRandomNote"])
     notesRepository.getRandomNote.and.returnValue(expectedResult);
 
-    const handler = new NotesActionPersistenceHandler({ logger, notesRepository });
+    const handler = new NotesPersistenceHandler({ logger, notesRepository });
 
     // Act & Assert
     await expectAsync(handler.getRandomNote()).toBeResolvedTo(expectedResult);
@@ -86,7 +85,7 @@ describe("notesActionPersistenceHandler", () => {
     notesRepository.getRandomNoteByContent.and.returnValue(Promise.resolve());
     const searchPhrase = faker.lorem.sentence();
 
-    const handler = new NotesActionPersistenceHandler({ logger, notesRepository });
+    const handler = new NotesPersistenceHandler({ logger, notesRepository });
 
     // Act
     await handler.getRandomNoteByContent(searchPhrase);
@@ -102,7 +101,7 @@ describe("notesActionPersistenceHandler", () => {
     var notesRepository = jasmine.createSpyObj("notesRepository", ["getRandomNoteByContent"])
     notesRepository.getRandomNoteByContent.and.returnValue(expectedResult);
 
-    const handler = new NotesActionPersistenceHandler({ logger, notesRepository });
+    const handler = new NotesPersistenceHandler({ logger, notesRepository });
 
     // Act & Assert
     await expectAsync(handler.getRandomNoteByContent()).toBeResolvedTo(expectedResult);

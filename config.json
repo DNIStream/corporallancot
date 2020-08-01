@@ -14,6 +14,21 @@
         "settings": {
           "key": null
         }
+      },
+      {
+        "name": "twitch",
+        "enabled": true,
+        "enabledActions": [
+          "notes",
+          "quote"
+        ],
+        "settings": {
+          "clientId": null,
+          "clientSecret": null,
+          "accessToken": null,
+          "refreshToken": null,
+          "channel": null
+        }
       }
     ]
   },

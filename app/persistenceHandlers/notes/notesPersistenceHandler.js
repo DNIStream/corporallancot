@@ -1,12 +1,12 @@
 'use strict';
 
-module.exports = class NotesActionPersistenceHandler {
+module.exports = class NotesPersistenceHandler {
   constructor({ logger, notesRepository }) {
     this.logger = logger;
     this.repository = notesRepository;
 
     this.logPrefix = `[${this.constructor.name}] `;
-    this.logger.log(`${this.logPrefix}Initialising action persistence handler`);
+    this.logger.log(`${this.logPrefix}Initialising`);
   }
 
   async insertNote(timestamp, userID, channelID, nick, message, server) {

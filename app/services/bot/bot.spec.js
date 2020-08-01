@@ -21,7 +21,6 @@ describe("bot init()", function () {
     // Arrange
     const chatListener = jasmine.createSpyObj("chatListeners", ["init"]);
     chatListeners = [chatListener, chatListener];
-    console.log(chatListeners);
     const bot = new Bot({ logger, botConfig, chatListeners});
 
     // Act

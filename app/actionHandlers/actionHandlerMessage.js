@@ -16,6 +16,7 @@ module.exports = class ActionHandlerMessage {
 
     this.userId = 0;
     this.channelId = 0
+    this.channelName = "";
     this.nick = "";
     this.timestamp = null;
   }

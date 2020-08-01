@@ -3,9 +3,9 @@
 const ActionHandlerBase = require("@actionHandlers/actionHandlerBase");
 
 module.exports = class NotesActionHandler extends ActionHandlerBase {
-  constructor({ logger, notesActionPersistenceHandler }) {
+  constructor({ logger, notesPersistenceHandler }) {
     super(logger, "notes");
-    this.persistenceHandler = notesActionPersistenceHandler;
+    this.persistenceHandler = notesPersistenceHandler;
     this.help = "`!notes [message]` records a note.";
   }
 

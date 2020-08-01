@@ -22,6 +22,8 @@ const ActionHandlerResolver = require("@actionHandlers/actionHandlerResolver");
 // 3rd party
 const MySQL = require("mysql2/promise");
 const Discord = require("discord.js");
+const TwitchChat = require("twitch-chat-client");
+const TwitchAuth = require("twitch-auth");
 
 // IoC container - these are the only references to console.log() that should exist in the application
 console.log("[Root] Creating IoC container");
@@ -34,14 +36,15 @@ console.log("[Root] Registering services");
 
 // Auto load actions & persistence handlers
 const actionHandlersGlob = 'app/actionHandlers/*/*ActionHandler.js';
-const actionPersistenceHandlersGlob = 'app/actionPersistenceHandlers/*/*ActionPersistenceHandler.js';
+const actionPersistenceHandlersGlob = 'app/persistenceHandlers/*/*PersistenceHandler.js';
 const chatListenersGlobSuffix = 'app/chatListeners/*/';
 const chatListenersGlob = `${chatListenersGlobSuffix}*ChatListener.js`;
 const repositoriesGlob = 'app/services/db/repositories/*/*Repository.js';
 
 container.loadModules([actionHandlersGlob, actionPersistenceHandlersGlob], {
   resolverOptions: {
-    register: ioc.asClass
+    register: ioc.asClass,
+    lifetime: Lifetime.SINGLETON
   }
 });
 
@@ -81,6 +84,8 @@ container.register({
   // 3rd Party dependencies
   mySql: ioc.asValue(MySQL),
   discordClient: ioc.asFunction(() => new Discord.Client()),
+  twitchChatClient: ioc.asValue(TwitchChat),
+  twitchAuth: ioc.asValue(TwitchAuth),
 
   // Database adapter. Swap out if you want to implement
   // another database provider.

@@ -3,7 +3,7 @@
 const ChatListenerBase = require("@chatListeners/chatListenerBase");
 
 module.exports = class DiscordChatListener extends ChatListenerBase {
-  constructor({ logger, actionHandlerResolver, discordChatListenerConfig, discordClient, discordMessageResolver }) {
+  constructor({ logger, actionHandlerResolver, discordChatListenerConfig, discordMessageResolver, discordClient }) {
     super(logger, actionHandlerResolver, discordMessageResolver);
 
     this.config = discordChatListenerConfig;

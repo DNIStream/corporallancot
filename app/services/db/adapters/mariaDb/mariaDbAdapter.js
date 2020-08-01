@@ -15,11 +15,11 @@ module.exports = class MariaDbAdapter extends DbAdapterBase {
       return;
     }
 
-    this.logger.log(`${this.logPrefix}Connecting to '${this.dbConfig.server}/${this.dbConfig.database}'`);
-
     let retry = 0;
     const retryCount = this.dbConfig.connRetryCount;
     const retryDelay = this.dbConfig.connRetryDelay;
+
+    this.logger.log(`${this.logPrefix}Connecting to '${this.dbConfig.server}/${this.dbConfig.database}'`);
 
     while (!this.connection) {
       try {

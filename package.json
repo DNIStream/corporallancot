@@ -10,19 +10,23 @@
     "start": "dotenv -- node index.js",
     "start:hosted": "node index.js",
     "docker:start": "docker-compose up -d --build",
+    "docker:startdb": "docker-compose up -d --scale bot=0",
     "docker:stop": "docker-compose down",
-    "docker:watch": "chokidar -p \"{docker-compose.yml,Dockerfile,.dockerignore,package.json,**/*.js,.env,config.json}\" --ignore \"{**/*.spec.js,node_modules/**/*,spec/**/*}\" -c \"npm run docker:start && docker logs corporallancot.bot\" --initial --debounce 1000",
+    "docker:watch": "chokidar -p \"{index.js,docker-compose.yml,Dockerfile,.dockerignore,package.json,**/*.js,.env,config.json}\" --ignore \"{**/*.spec.js,node_modules/**/*,spec/**/*}\" -c \"npm run docker:start && docker logs corporallancot.bot\" --initial --debounce 1000",
     "test": "jasmine",
-    "test:watch": "chokidar -p \"{**/*.js,package.json,spec/support/jasmine.json}\" --ignore \"node_modules/**/*\" -c \"npm run test\" --initial --debounce 500",
+    "test:watch": "chokidar -p \"{index.js,**/*.js,package.json,spec/support/jasmine.json}\" --ignore \"node_modules/**/*\" -c \"npm run test\" --initial --debounce 500",
     "lint": "eslint .",
-    "lint:watch": "chokidar -p \"{**/*.js,.eslintrc.json,package.json}\" --ignore \"node_modules/**/*\" -c \"npm run lint\" --initial --debounce 500",
+    "lint:watch": "chokidar -p \"{index.js,**/*.js,.eslintrc.json,package.json}\" --ignore \"node_modules/**/*\" -c \"npm run lint\" --initial --debounce 500",
     "logs": "docker logs corporallancot.bot"
   },
   "dependencies": {
     "awilix": "^4.2.6",
     "discord.js": "^12.2.0",
     "module-alias": "^2.2.2",
-    "mysql2": "^2.1.0"
+    "mysql2": "^2.1.0",
+    "twitch": "^4.2.0-pre.4",
+    "twitch-auth": "^4.2.0-pre.4",
+    "twitch-chat-client": "^4.2.0-pre.4"
   },
   "devDependencies": {
     "chokidar-cli": "^2.1.0",
@@ -36,7 +40,7 @@
   "_moduleAliases": {
     "@root": "app",
     "@actionHandlers": "app/actionHandlers",
-    "@actionPersistenceHandlers": "app/actionPersistenceHandlers",
+    "@persistenceHandlers": "app/persistenceHandlers",
     "@services": "app/services",
     "@errors": "app/errors",
     "@config": "app/config",
