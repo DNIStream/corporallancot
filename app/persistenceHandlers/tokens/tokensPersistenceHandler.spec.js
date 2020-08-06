@@ -32,6 +32,7 @@ describe("tokensPersistenceHandler", () => {
   //////////////////
   it("insert calls repository.insert with passed parameters", async () => {
     // Arrange
+    const server = faker.lorem.word();
     const accessToken = faker.random.uuid();
     const refreshToken = faker.random.uuid();
     const dateCreated = faker.date.recent();
@@ -40,11 +41,11 @@ describe("tokensPersistenceHandler", () => {
     const handler = new TokensPersistenceHandler({ logger, tokensRepository });
 
     // Act
-    await handler.insert(accessToken, refreshToken, dateCreated, expiryDate);
+    await handler.insert(server, accessToken, refreshToken, dateCreated, expiryDate);
 
     // Assert
     expect(tokensRepository.insert)
-      .toHaveBeenCalledWith(accessToken, refreshToken, dateCreated, expiryDate);
+      .toHaveBeenCalledWith(server, accessToken, refreshToken, dateCreated, expiryDate);
   });
 
   it("insert returns repository.insert as result", async () => {

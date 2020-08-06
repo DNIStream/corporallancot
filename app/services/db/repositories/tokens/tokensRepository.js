@@ -65,8 +65,6 @@ CREATE TABLE IF NOT EXISTS ${this.tableName} (
       AccessToken = ?,
       RefreshToken = ?,
       ExpiryDate = ?
-    WHERE Id = ?;`,
-      [accessToken, refreshToken, expiryDate, server]
-    );
+    WHERE Id = ?;`, [accessToken, refreshToken, expiryDate, server]);
   }
 }
