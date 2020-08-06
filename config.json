@@ -27,7 +27,11 @@
           "clientSecret": null,
           "accessToken": null,
           "refreshToken": null,
-          "channel": null
+          "channel": null,
+          "botNicks": [
+            "nightbot",
+            "attachtoprocess"
+          ]
         }
       }
     ]

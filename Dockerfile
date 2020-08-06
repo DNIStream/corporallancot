@@ -12,6 +12,9 @@ RUN set -x \
   && npm set progress=false \
   && npm install --no-progress --only=prod
 
+RUN set -x \
+  && apk add tzdata
+
 COPY /config.json /bot
 COPY /index.js /bot
 COPY /app /bot/app

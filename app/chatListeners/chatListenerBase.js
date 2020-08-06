@@ -11,6 +11,7 @@ module.exports = class ChatListenerBase {
   }
 
   async init() {
+    // TODO: Check if this chat listener is enabled
     throw NotImplemented;
   }
 
@@ -27,6 +28,10 @@ module.exports = class ChatListenerBase {
     }
 
     const actionHandler = await this.actionHandlerResolver.resolve(actionHandlerMessage);
+
+    // TODO: Check if this actionHandler is enabled for the resolved actionHandlerMessage.server
+
+    // TODO: Throttle input
 
     const reply = await actionHandler.handle(actionHandlerMessage);
     if (reply && reply.trimEnd().length > 0) {

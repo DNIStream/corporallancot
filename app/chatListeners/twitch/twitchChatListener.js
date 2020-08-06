@@ -64,13 +64,9 @@ module.exports = class TwitchChatListener extends ChatListenerBase {
     await this.chatClient.connect();
     this.logger.log(`${this.logPrefix}Connected to chat`);
 
-    this.chatClient.onPrivmsg(async (channel, user, message) => {
+    this.chatClient.onPrivmsg(async (channel, user, message, msg) => {
       try {
-        await this.handleMessage({
-          message,
-          channel,
-          user
-        })
+        await this.handleMessage(msg);
       } catch (e) {
         this.logger.log(`${this.logPrefix}Twitch message handling error:\n`, e);
       }
@@ -84,6 +80,6 @@ module.exports = class TwitchChatListener extends ChatListenerBase {
   }
 
   async replyAction(twitchMessage, replyText) {
-    this.chatClient.say(twitchMessage.channel, `@${twitchMessage.user} ${replyText}`)
+    this.chatClient.say(twitchMessage.target.value, `@${twitchMessage._prefix.nick} ${replyText}`)
   }
 }

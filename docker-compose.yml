@@ -12,6 +12,7 @@ services:
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
+      TZ: Europe/London
     volumes:
       - ${BOT_DB_MOUNT_PATH}:/var/lib/mysql
       - ${BOT_DB_SQL_SCRIPTS_MOUNT_PATH}:/docker-entrypoint-initdb.d
@@ -33,3 +34,4 @@ services:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      TZ: Europe/London

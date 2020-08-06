@@ -13,22 +13,18 @@ module.exports = class TwitchMessageResolver extends MessageResolverBase {
    * Resolves a twitch message to an @class ActionHandlerMessage
    */
   async resolve(twitchMessage) {
-    const message = super.resolveChatMessage(twitchMessage.message);
+    const message = super.resolveChatMessage(twitchMessage.message.value);
 
     // Append twitch specific message content
     message.server = "twitch";
 
-    // Ugh, null coalesce plsthxadmin!
     if (twitchMessage) {
-      message.timestamp = new Date();
-      if (twitchMessage.user) {
-        message.userId = 0;
-        message.nick = twitchMessage.user;
-        message.isBot = false;
-      }
-      if (twitchMessage.channel) {
-        message.channelName = twitchMessage.channel;
-      }
+      message.timestamp = new Date(+twitchMessage._tags.get('tmi-sent-ts'));
+      message.userId = twitchMessage._tags.get('user-id');
+      message.nick = twitchMessage._prefix.nick;
+      message.isBot = false; // TODO: Populate based on nick (from settings.botNicks in config)
+      message.channelId = twitchMessage._tags.get('room-id');
+      message.channelName = twitchMessage.target.value;
     }
     return message;
   }
