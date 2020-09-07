@@ -22,7 +22,7 @@ module.exports = class ChatListenerBase {
 
     const actionHandlerMessage = await this.messageResolver.resolve(chatListenerMessage);
 
-    // Do not attempt to process any bot messages
+    // Do not attempt to process or log any bot messages for any chat listeners
     if (actionHandlerMessage.isBot === true) {
       return;
     }

@@ -9,12 +9,14 @@ module.exports = ({ configFilePath, environment }) => {
   }
   // Override secrets with specific env settings
   const discord = config.bot.chatListeners.find(x => x.name == "discord");
+  // TODO: Implement UI to auth with Discord
   discord.settings.key = environment.BOT_DISCORD_KEY;
 
   const twitch = config.bot.chatListeners.find(x => x.name == "twitch");
   twitch.settings.clientId = environment.BOT_TWITCH_CLIENTID;
   twitch.settings.clientSecret = environment.BOT_TWITCH_CLIENTSECRET;
   twitch.settings.channel = environment.BOT_TWITCH_CHANNEL;
+  // TODO: Implement UI to auth with Twitch
   twitch.settings.accessToken = environment.BOT_TWITCH_ACCESSTOKEN;
   twitch.settings.refreshToken = environment.BOT_TWITCH_REFRESHTOKEN;
 

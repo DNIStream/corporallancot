@@ -2,6 +2,7 @@
 
 module.exports = class TwitchChatListenerConfig {
   constructor({ appConfig }) {
+    // TODO: Implement base class with shared properties
     // Defaults
     this.token = null;
     this.enabled = false;
@@ -20,7 +21,9 @@ module.exports = class TwitchChatListenerConfig {
     this.clientSecret = config.settings.clientSecret;
     this.accessToken = config.settings.accessToken;
     this.refreshToken = config.settings.refreshToken;
+    this.botNicks = config.settings.botNicks;
     this.channel = config.settings.channel;
+
     this.enabled = config.enabled;
   }
 }

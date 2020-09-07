@@ -32,7 +32,7 @@
     "chokidar-cli": "^2.1.0",
     "dotenv-cli": "^3.1.0",
     "eslint": "^7.3.0",
-    "faker": "^4.1.0",
+    "faker": "^5.1.0",
     "jasmine": "^3.5.0",
     "jasmine-console-reporter": "^3.1.0",
     "jasmine-theories": "^0.1.3"

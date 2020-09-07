@@ -9,7 +9,7 @@ module.exports = class ActionHandlerResolver {
 
   async resolve(actionHandlerMessage) {
     const m = actionHandlerMessage;
-    this.logger.log(`${this.logPrefix}Received isBangCommand: '${m.isBangCommand}'; command: '${m.command}'; data: '${m.data}'`);
+    this.logger.log(`${this.logPrefix}Received: ${JSON.stringify(m)}`);
     if (m.isBangCommand === true && m.command === "generic") {
       throw new Error("The generic action handler cannot be resolved with a bang command");
     }

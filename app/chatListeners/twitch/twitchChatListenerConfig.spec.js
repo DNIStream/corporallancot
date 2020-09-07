@@ -142,6 +142,31 @@ describe("twitchChatListenerConfig", function () {
     expect(actualResult.enabled).toBe(expectedValue);
   });
 
+  it("maps injected appConfig.bot.chatListeners[twitch].settings.botNicks property to .botNicks", () => {
+    // Arrange
+    const expectedValue = faker.internet.userName();
+    const expectedBotNicks = faker.random.arrayElements();
+    const appConfig = {
+      bot: {
+        chatListeners: [
+          {
+            name: "twitch",
+            enabled: expectedValue,
+            settings: {
+              botNicks: expectedBotNicks
+            }
+          }
+        ]
+      }
+    };
+
+    // Act
+    const actualResult = new TwitchChatListenerConfig({ appConfig });
+
+    // Assert
+    expect(actualResult.botNicks).toEqual(expectedBotNicks);
+  });
+
   it("sets .name property to twitch", () => {
     // Arrange
     const appConfig = jasmine.createSpy("appConfig");
