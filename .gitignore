@@ -113,3 +113,5 @@ invite.txt
 # The below files contain sensitive info related to GitHub Package deployment
 docker-username
 docker-password
+
+.vscode/symbols.json
