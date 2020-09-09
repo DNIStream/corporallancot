@@ -67,12 +67,11 @@
     "forceConsistentCasingInFileNames": true  /* Disallow inconsistently-cased references to the same file. */
   },
   "include": [
-    "./app/**/*", /* TODO: Set to *.ts once all .js files are migrated to .ts */
-    "./index.js", /* TODO: Remove once all .js files are migrated to .ts */
+    "./app/**/*.ts",
     "./index.ts"
   ],
   "exclude": [
-    "./**/*.spec.js", /* TODO: Remove once all .js files are migrated to .ts */
+    "./spec",
     "./**/*.spec.ts"
   ]
 }

@@ -11,3 +11,4 @@ README.md
 LICENSE
 .env
 *.spec.js
+*.spec.ts

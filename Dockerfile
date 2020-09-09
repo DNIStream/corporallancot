@@ -13,7 +13,7 @@ RUN set -x \
   && npm install --no-progress
 
 COPY tsconfig.json .
-COPY index.* .
+COPY index.ts .
 COPY app/ ./app
 
 RUN ls -la
