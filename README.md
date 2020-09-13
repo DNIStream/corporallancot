@@ -16,4 +16,4 @@ This project currently uses MariaDB as a backing store.
 
 ### Acknowledgements
 
-This bot was originally forked from [@lewster32/corporallancot](https://github.com/lewster32/corporallancot) but has diverged significantly from Corporal Lancot's original intended use-case. Thanks go out to good friend [Lewis 'SEPTiMUS' Lane](https://github.com/lewster32/) for providing inspiration, motivation and the base code for DNI Bot.
+This bot was originally forked from [@lewster32/dni-bot](https://github.com/lewster32/dni-bot) but has diverged significantly from Corporal Lancot's original intended use-case. Thanks go out to good friend [Lewis 'SEPTiMUS' Lane](https://github.com/lewster32/) for providing inspiration, motivation and the base code for DNI Bot.

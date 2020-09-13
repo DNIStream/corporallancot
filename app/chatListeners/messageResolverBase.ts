@@ -1,24 +1,33 @@
-'use strict';
+import { IActionHandlerMessage } from '../actionHandlers/actionHandlerMessage.js';
+import { LoggingBase } from '../loggingBase.js';
+import { Logger } from '../services/logging/logger.js';
 
-const NotImplemented = require("@errors/notImplemented");
-const ActionHandlerMessage = require("@actionHandlers/actionHandlerMessage");
-
-module.exports = class MessageResolverBase {
-  async resolve() {
-    // Must be overridden and must call resolveChatMessage(inputMessage.<chatMessageProp>)
-    throw NotImplemented;
+export abstract class MessageResolverBase extends LoggingBase {
+  constructor(logger: Logger) {
+    super(logger);
   }
 
-  resolveChatMessage(chatMessage) {
+  public abstract async resolve(chatListenerMessage: unknown): Promise<IActionHandlerMessage>;
+
+  public resolveChatMessage(chatMessage: string): IActionHandlerMessage {
     if (!chatMessage || chatMessage.replace(/\s/g, '').length <= 0) {
       throw new Error("'message' is required");
     }
 
     // Set defaults
-    const action = new ActionHandlerMessage();
-    action.command = "";
-    action.data = "";
-    action.isBangCommand = false;
+    const action: IActionHandlerMessage = {
+      command: "",
+      data: "",
+      isBangCommand: false,
+      // TODO: Check these properties - were not included in original JS
+      channelId: 0,
+      channelName: "",
+      isBot: false,
+      nick: "",
+      userId: 0,
+      server: "",
+      timestamp: new Date()
+    }
 
     // Slice up message string to make parameters
     const matches = /^!([a-z]+)(?:\s+(.*))?$/gi.exec(chatMessage);

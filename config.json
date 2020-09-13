@@ -1,8 +1,8 @@
 {
   "bot": {
     "name": null,
-    "version": null,
     "description": null,
+    "version": null,
     "chatListeners": [
       {
         "name": "discord",

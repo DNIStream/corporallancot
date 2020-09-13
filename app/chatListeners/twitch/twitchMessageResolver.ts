@@ -1,29 +1,31 @@
-'use strict';
+import { MessageResolverBase } from '../messageResolverBase.js';
+import { Logger } from '../../services/logging/logger.js';
+import { TwitchChatListenerConfig } from './twitchChatListenerConfig.js';
+import { TwitchPrivateMessage } from 'twitch-chat-client/lib/StandardCommands/TwitchPrivateMessage';
+import { IActionHandlerMessage } from '../../actionHandlers/actionHandlerMessage.js';
 
-const MessageResolverBase = require("@chatListeners/messageResolverBase");
+export class TwitchMessageResolver extends MessageResolverBase {
+  private config: TwitchChatListenerConfig;
 
-module.exports = class TwitchMessageResolver extends MessageResolverBase {
-  constructor({ logger, twitchChatListenerConfig }) {
-    super();
-    this.logger = logger;
+  constructor(logger: Logger, twitchChatListenerConfig: TwitchChatListenerConfig) {
+    super(logger);
     this.config = twitchChatListenerConfig;
-    this.logPrefix = `[${this.constructor.name}] `;
   }
 
   /**
    * Resolves a twitch message to an @class ActionHandlerMessage
    */
-  async resolve(twitchMessage) {
+  public async resolve(twitchMessage: TwitchPrivateMessage): Promise<IActionHandlerMessage> {
     const message = super.resolveChatMessage(twitchMessage.message.value);
 
     // Append twitch specific message content
     message.server = "twitch";
+    const ts = twitchMessage.tags.get('tmi-sent-ts') || 0;
+    message.timestamp = new Date(+ts);
+    message.userId = +(twitchMessage.tags.get('user-id') || 0);
+    message.channelId = +(twitchMessage.tags.get('room-id') || 0);
 
-    message.timestamp = new Date(+twitchMessage._tags.get('tmi-sent-ts'));
-    message.userId = twitchMessage._tags.get('user-id');
-    message.channelId = twitchMessage._tags.get('room-id');
-
-    message.nick = twitchMessage._prefix.nick;
+    message.nick = twitchMessage.prefix === undefined ? "" : twitchMessage.prefix.nick;
 
     // Look up bot names in configuration
     message.isBot = this.config.botNicks.includes(message.nick);

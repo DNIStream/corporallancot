@@ -1,16 +1,23 @@
-'use strict';
+import { Client, Message } from 'discord.js';
 
-const ChatListenerBase = require("@chatListeners/chatListenerBase");
+import { Logger } from '../../services/logging/logger.js';
+import { ChatListenerBase } from '../chatListenerBase.js';
+import { ActionHandlerResolver } from '../../actionHandlers/actionHandlerResolver.js';
+import { DiscordChatListenerConfig } from './discordChatListenerConfig.js';
+import { DiscordMessageResolver } from './discordMessageResolver.js';
 
-module.exports = class DiscordChatListener extends ChatListenerBase {
-  constructor({ logger, actionHandlerResolver, discordChatListenerConfig, discordMessageResolver, discordClient }) {
+export class DiscordChatListener extends ChatListenerBase {
+  protected config: DiscordChatListenerConfig;
+  private client: Client;
+
+  constructor(logger: Logger, actionHandlerResolver: ActionHandlerResolver, discordChatListenerConfig: DiscordChatListenerConfig, discordMessageResolver: DiscordMessageResolver, discordClient: Client) {
     super(logger, actionHandlerResolver, discordMessageResolver);
 
     this.config = discordChatListenerConfig;
     this.client = discordClient;
   }
 
-  async init() {
+  public async init(): Promise<void> {
     this.logger.log(`${this.logPrefix}Initialising - logging in`);
 
     await this.client
@@ -32,11 +39,11 @@ module.exports = class DiscordChatListener extends ChatListenerBase {
     this.logger.log(`${this.logPrefix}Initialised successfully`);
   }
 
-  async handleMessage(discordMessage) {
+  protected async handleMessage(discordMessage: Message): Promise<void> {
     await super.handleMessage(discordMessage);
   }
 
-  async replyAction(discordMessage, replyText) {
+  protected async replyAction(discordMessage: Message, replyText: string): Promise<void> {
     discordMessage.reply(replyText);
   }
 }

@@ -1,4 +1,5 @@
-'use strict';
-
-const notImplementedException = new Error("Not Implemented");
-module.exports = notImplementedException;
+export class NotImplemented extends Error {
+  constructor() {
+    super("Not Implemented");
+  }
+}

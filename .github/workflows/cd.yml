@@ -9,12 +9,12 @@ on:
 env:
   #IMAGE_TAG: 0.1.0 # For testing purposes only. Dealt with in the "Get image tags" task.
   DOCKER_REGISTRY: docker.pkg.github.com
-  BOT_IMAGE: docker.pkg.github.com/lewster32/corporallancot/corporallancot # Cannot use variable references here - hence repeat info
+  BOT_IMAGE: docker.pkg.github.com/lewster32/dni-bot/dni-bot # Cannot use variable references here - hence repeat info
 
   # docker-compose.yml file required environment variables for building the image(s)
-  IMAGE_PREFIX: docker.pkg.github.com/lewster32/corporallancot/
+  IMAGE_PREFIX: docker.pkg.github.com/lewster32/dni-bot/
   BOT_DB_LOCAL_PORT: 3306
-  BOT_DB_SERVER: corporallancot.db
+  BOT_DB_SERVER: dni-bot.db
   BOT_DB_MOUNT_PATH: /tmp/cl/db
   BOT_DB_SQL_SCRIPTS_MOUNT_PATH: /tmp/cl/sqlscripts
   BOT_LOGS_MOUNT_PATH: /tmp/cl/logs

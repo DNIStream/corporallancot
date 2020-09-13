@@ -1,21 +1,26 @@
-'use strict';
+import { ChatListenerConfigBase } from '../chatListenerConfigBase.js';
+import { BotConfig } from '../../config/bot/botConfig';
 
-module.exports = class DiscordChatListenerConfig {
-  constructor({ appConfig }) {
+export class DiscordChatListenerConfig extends ChatListenerConfigBase {
+
+  public token: string = "";
+
+  constructor(botConfig: BotConfig) {
+    super(botConfig);
+
     // Defaults
-    this.token = null;
     this.enabled = false;
 
-    if (!appConfig || !appConfig.bot || !appConfig.bot.chatListeners || appConfig.bot.chatListeners.length <= 0) {
+    if (!botConfig || !botConfig.chatListeners || botConfig.chatListeners.length <= 0) {
       return;
     }
-    const config = appConfig.bot.chatListeners.find(x => x.name == "discord");
+    const config = botConfig.chatListeners.find(x => x.name == "discord");
     if (!config || !config.settings) {
       return;
     }
 
     // Inject found config settings
-    this.token = config.settings.key;
+    this.token = <string>(config.settings.key);
     this.enabled = config.enabled;
   }
 }

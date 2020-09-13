@@ -1,17 +1,17 @@
-import { AppConfig } from '../config/app/appConfig';
+import { BotConfig } from 'config/bot/botConfig.js';
 
 export class ChatListenerConfigBase {
+  public name: string = "";
+  public enabled: boolean = false;
+  public enabledActions: string[] = [];
+  public settings: any = {};
 
-  protected name: string = "";
-  protected enabled: boolean = false;
-  protected enabledActions: string[] = [];
-  protected settings: any = {};
-
-  constructor(appConfig: AppConfig) {
-    if (!appConfig || !appConfig.bot || !appConfig.bot.chatListeners || appConfig.bot.chatListeners.length <= 0) {
+  constructor(botConfig: BotConfig) {
+    // TODO: Load settings dynamically based on botConfig input
+    if (!botConfig || !botConfig.chatListeners || botConfig.chatListeners.length <= 0) {
       return;
     }
-    const config = appConfig.bot.chatListeners.find(x => x.name == this.name);
+    const config = botConfig.chatListeners.find(x => x.name == this.name);
     if (!config || !config.settings) {
       return;
     }

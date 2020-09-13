@@ -1,4 +1,4 @@
-import { Logger } from "./services/logging/logger";
+import { Logger } from './services/logging/logger.js';
 
 /*
  * A base class for types that need logging support

@@ -1,15 +1,21 @@
-'use strict';
+import { DbConfig } from '../../../../config/db/dbConfig.js';
+import { Logger } from '../../../logging/logger.js';
+import { DbAdapterBase } from '../dbAdapterBase.js';
 
-const DbAdapterBase = require("@dbAdapters/dbAdapterBase");
+import { Connection, createConnection } from 'mysql2/promise';
 
-module.exports = class MariaDbAdapter extends DbAdapterBase {
-  constructor({ mySql, dbConfig, logger }) {
-    super(dbConfig, logger);
-    this.mysql = mySql;
+export class MariaDbAdapter extends DbAdapterBase {
+  private _connection: Connection;
+  public get connection(): Connection {
+    return this._connection;
   }
 
-  async connect() {
-    if (this.connection) {
+  constructor(dbConfig: DbConfig, logger: Logger) {
+    super(dbConfig, logger);
+  }
+
+  public async connect(): Promise<void> {
+    if (this._connection) {
       // TODO: Need to check that the connection is still active in case of a disconnect...
       this.logger.log(`${this.logPrefix}Connection to '${this.dbConfig.server}/${this.dbConfig.database}' already established.`);
       return;
@@ -21,10 +27,10 @@ module.exports = class MariaDbAdapter extends DbAdapterBase {
 
     this.logger.log(`${this.logPrefix}Connecting to '${this.dbConfig.server}/${this.dbConfig.database}'`);
 
-    while (!this.connection) {
+    while (!this._connection) {
       try {
-        this.connection = await this.tryConnection();
-        this.logger.log(`${this.logPrefix}Connected to database '${this.connection.config.host}'`);
+        this._connection = await this.tryConnection();
+        this.logger.log(`${this.logPrefix}Connected to database '${this._connection.config.host}'`);
         break;
       } catch (e) {
         // TODO: Potentially need to test for the following error codes
@@ -49,8 +55,8 @@ module.exports = class MariaDbAdapter extends DbAdapterBase {
     }
   }
 
-  async tryConnection() {
-    return await this.mysql.createConnection({
+  private async tryConnection(): Promise<Connection> {
+    return await createConnection({
       host: this.dbConfig.server,
       user: this.dbConfig.username,
       password: this.dbConfig.password,
@@ -58,7 +64,7 @@ module.exports = class MariaDbAdapter extends DbAdapterBase {
     });
   }
 
-  async sleep(ms) {
+  private async sleep(ms: number): Promise<void> {
     return new Promise((resolve) => {
       setTimeout(resolve, ms);
     });

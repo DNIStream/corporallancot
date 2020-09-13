@@ -1,26 +1,30 @@
-'use strict';
+import { Logger } from '../../services/logging/logger.js';
+import { TokensRepository } from '../../services/db/repositories/tokens/tokensRepository.js';
+import { LoggingBase } from '../../loggingBase.js';
+import { FieldPacket, RowDataPacket } from 'mysql2/promise';
 
-module.exports = class TokensPersistenceHandler {
-  constructor({ logger, tokensRepository }) {
-    this.logger = logger;
+export class TokensPersistenceHandler extends LoggingBase {
+  private repository: TokensRepository;
+
+  constructor(logger: Logger, tokensRepository: TokensRepository) {
+    super(logger);
     this.repository = tokensRepository;
 
-    this.logPrefix = `[${this.constructor.name}] `;
     this.logger.log(`${this.logPrefix}Initialising`);
   }
 
-  async insert(server, accessToken, refreshToken, dateCreated, expiryDate) {
+  public async insert(server: string, accessToken: string, refreshToken: string, dateCreated: Date, expiryDate: Date | null): Promise<[RowDataPacket[], FieldPacket[]]> {
     this.logger.log(`${this.logPrefix}Inserting new tokens for server '${server}'`);
     return await this.repository.insert(server, accessToken, refreshToken, dateCreated, expiryDate);
   }
 
-  async update(server, accessToken, refreshToken, expiryDate) {
+  public async update(server: string, accessToken: string, refreshToken: string, expiryDate: Date | null): Promise<[RowDataPacket[], FieldPacket[]]> {
     this.logger.log(`${this.logPrefix}Updating token for server '${server}'`);
     return await this.repository.update(server, accessToken, refreshToken, expiryDate);
   }
 
-  async getByServer(server) {
+  public async getByServer(server: string): Promise<[RowDataPacket[], FieldPacket[]]> {
     this.logger.log(`${this.logPrefix}Retrieving tokens for server '${server}'`);
     return await this.repository.getByServer(server);
   }
-};
+}

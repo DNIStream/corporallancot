@@ -1,18 +1,15 @@
-'use strict';
-
-const NotImplemented = require("@errors/notImplemented");
+import { DbConfig } from '../../../config/db/dbConfig.js';
+import { Logger } from '../../logging/logger.js';
+import { LoggingBase } from '../../../loggingBase.js';
 
 // "Abstract" base class for database injection
-module.exports = class DbAdapterBase {
-  constructor(dbConfig, logger) {
-    this.logger = logger;
+export abstract class DbAdapterBase extends LoggingBase {
+  protected readonly dbConfig: DbConfig;
+
+  constructor(dbConfig: DbConfig, logger: Logger) {
+    super(logger);
     this.dbConfig = dbConfig;
-    this.connection = null;
-    this.logPrefix = `[${this.constructor.name}] `;
   }
 
-  async connect() {
-    // When implemented, set this.connection
-    throw NotImplemented;
-  }
+  public abstract async connect(): Promise<void>;
 }

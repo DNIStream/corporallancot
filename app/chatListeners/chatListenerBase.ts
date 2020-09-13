@@ -1,33 +1,41 @@
-'use strict';
+import { Logger } from '../services/logging/logger.js';
+import { ActionHandlerResolver } from '../actionHandlers/actionHandlerResolver.js';
+import { MessageResolverBase } from './messageResolverBase.js';
+import { LoggingBase } from '../loggingBase.js';
+import { NotImplemented } from '../errors/notImplemented.js';
+import { ChatListenerConfigBase } from './chatListenerConfigBase.js';
 
-const NotImplemented = require("@errors/notImplemented");
+export class ChatListenerBase extends LoggingBase {
+  private readonly _actionHandlerResolver: ActionHandlerResolver;
+  private readonly _messageResolver: MessageResolverBase;
 
-module.exports = class ChatListenerBase {
-  constructor(logger, actionHandlerResolver, messageResolver) {
-    this.logger = logger;
-    this.actionHandlerResolver = actionHandlerResolver;
-    this.messageResolver = messageResolver;
-    this.logPrefix = `[${this.constructor.name}] `;
+  protected config: ChatListenerConfigBase;
+
+  constructor(logger: Logger, actionHandlerResolver: ActionHandlerResolver, messageResolver: MessageResolverBase) {
+    super(logger);
+
+    this._actionHandlerResolver = actionHandlerResolver;
+    this._messageResolver = messageResolver;
   }
 
-  async init() {
+  public async init(): Promise<void> {
     // TODO: Check if this chat listener is enabled
     throw NotImplemented;
   }
 
-  async handleMessage(chatListenerMessage) {
+  protected async handleMessage(chatListenerMessage: unknown): Promise<void> {
     if (!chatListenerMessage || !(typeof chatListenerMessage === "object")) {
       return;
     }
 
-    const actionHandlerMessage = await this.messageResolver.resolve(chatListenerMessage);
+    const actionHandlerMessage = await this._messageResolver.resolve(chatListenerMessage);
 
     // Do not attempt to process or log any bot messages for any chat listeners
     if (actionHandlerMessage.isBot === true) {
       return;
     }
 
-    const actionHandler = await this.actionHandlerResolver.resolve(actionHandlerMessage);
+    const actionHandler = await this._actionHandlerResolver.resolve(actionHandlerMessage);
 
     // TODO: Check if this actionHandler is enabled for the resolved actionHandlerMessage.server
 
@@ -41,7 +49,7 @@ module.exports = class ChatListenerBase {
 
   // Child classes must implement:
   // async replyAction(chatListenerMessage, replyText)
-  async replyAction() {
+  protected async replyAction(chatListenerMessage: unknown, replyText: string): Promise<void> {
     throw NotImplemented;
   }
 }

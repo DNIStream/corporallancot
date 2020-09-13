@@ -1,39 +1,51 @@
 {
-  "name": "corporal-lancot",
+  "name": "dni-bot",
   "version": "0.1.1",
-  "description": "Halt!",
-  "main": "index.js",
-  "author": "Lewis 'SEPTiMUS' Lane",
-  "repository": "github:lewster32/corporallancot",
-  "license": "MIT",
+  "description": "DNI bot",
+  "author": "Chris Sebok",
+  "repository": "github:DNIStream/dni.bot",
+  "license": "GPL-3.0-or-later",
   "scripts": {
-    "start": "npm run tsc && dotenv -- node dist/index.js",
+    "start": "npm run tsc:build && npm run tsc:run",
+    "start:watch": "chokidar -p \"{docker-compose.yml,Dockerfile,.dockerignore,package.json,**/*.js,*.js,**/*.ts,*.ts,.env,config.json,tsconfig.json}\" --ignore \"{**/*.spec.js,node_modules/**/*,spec/**/*,dist/**/*}\" -c \"npm start\" --initial --debounce 1000",
     "start:hosted": "node index.js",
     "docker:start": "docker-compose up -d --build",
     "docker:startdb": "docker-compose up -d --scale bot=0",
     "docker:stop": "docker-compose down",
-    "docker:watch": "chokidar -p \"{docker-compose.yml,Dockerfile,.dockerignore,package.json,**/*.js,*.js,**/*.ts,*.ts,.env,config.json,tsconfig.json}\" --ignore \"{**/*.spec.js,node_modules/**/*,spec/**/*,dist/**/*}\" -c \"npm run docker:start && docker logs corporallancot.bot\" --initial --debounce 1000",
+    "docker:watch": "chokidar -p \"{docker-compose.yml,Dockerfile,.dockerignore,package.json,**/*.js,*.js,**/*.ts,*.ts,.env,config.json,tsconfig.json}\" --ignore \"{**/*.spec.js,node_modules/**/*,spec/**/*,dist/**/*}\" -c \"npm run docker:start && docker logs dni-bot.bot\" --initial --debounce 1000",
     "test": "jasmine",
-    "test:watch": "chokidar -p \"{*.js,*.ts,**/*.js,**/*.ts,package.json,spec/support/jasmine.json,tsconfig.json}\" --ignore \"{node_modules/**/*,dist/**/*}\" -c \"npm run test\" --initial --debounce 500",
-    "lint": "eslint .",
-    "lint:watch": "chokidar -p \"{*.js,*.ts,**/*.js**/*.ts,.eslintrc.json,package.json}\" --ignore \"{node_modules/**/*,dist/**/*}\" -c \"npm run lint\" --initial --debounce 500",
-    "logs": "docker logs corporallancot.bot",
+    "test:watch": "chokidar -p \"{dist/**/*.spec.js,package.json,spec/support/jasmine.json,tsconfig.json}\" --ignore \"{node_modules/**/*}\" -c \"npm run test\" --initial --debounce 500",
+    "lint": "eslint . --ext .ts",
+    "lint:watch": "chokidar -p \"{*.ts,**/*.ts,.eslintrc,.eslintignore,package.json,tsconfig.json}\" --ignore \"{node_modules/**/*,dist/**/*}\" -c \"npm run lint\" --initial --debounce 500",
+    "logs": "docker logs dni-bot.bot",
     "tsc": "tsc",
-    "tsc:clean": "rimraf dist/"
+    "tsc:build": "npm run tsc",
+    "tsc:run": "dotenv -- node --enable-source-maps dist/index.js",
+    "tsc:clean": "rimraf dist/",
+    "tsc:inspect": "node --inspect dist/"
+  },
+  "engines": {
+    "node": ">=12.18.3"
   },
   "dependencies": {
     "awilix": "^4.2.6",
     "discord.js": "^12.2.0",
-    "module-alias": "^2.2.2",
-    "mysql2": "^2.1.0",
-    "twitch": "^4.2.0-pre.4",
-    "twitch-auth": "^4.2.0-pre.4",
-    "twitch-chat-client": "^4.2.0-pre.4"
+    "mysql2": "^2.2.5",
+    "twitch": "^4.2.5",
+    "twitch-auth": "^4.2.5",
+    "twitch-chat-client": "^4.2.5"
   },
   "devDependencies": {
+    "@types/faker": "^5.1.2",
+    "@types/jasmine": "^3.5.14",
+    "@types/node": "^14.10.0",
+    "@typescript-eslint/eslint-plugin": "^4.2.0",
+    "@typescript-eslint/parser": "^4.2.0",
     "chokidar-cli": "^2.1.0",
     "dotenv-cli": "^3.1.0",
-    "eslint": "^7.3.0",
+    "eslint": "^7.8.1",
+    "eslint-plugin-jasmine": "^4.1.1",
+    "eslint-plugin-node": "^11.1.0",
     "faker": "^5.1.0",
     "jasmine": "^3.5.0",
     "jasmine-console-reporter": "^3.1.0",
@@ -41,16 +53,5 @@
     "rimraf": "^3.0.2",
     "tslint": "^6.1.3",
     "typescript": "^4.0.2"
-  },
-  "_moduleAliases": {
-    "@root": "app",
-    "@actionHandlers": "app/actionHandlers",
-    "@persistenceHandlers": "app/persistenceHandlers",
-    "@services": "app/services",
-    "@errors": "app/errors",
-    "@config": "app/config",
-    "@dbRepositories": "app/services/db/repositories",
-    "@dbAdapters": "app/services/db/adapters",
-    "@chatListeners": "app/chatListeners"
   }
 }

@@ -1,133 +1,121 @@
-'use strict';
+// import { TokensPersistenceHandler } from './tokensPersistenceHandler';
+// import { lorem, random, date } from 'faker';
+// import { Logger } from '../../services/logging/logger';
+// import { TokensRepository } from '../../services/db/repositories/tokens/tokensRepository';
+// import { RowDataPacket } from 'mysql2';
+// import { FieldPacket } from 'mysql2/promise';
 
-const TokensPersistenceHandler = require("@persistenceHandlers/tokens/tokensPersistenceHandler");
-const faker = require('faker');
+// describe("tokensPersistenceHandler", () => {
+//   let logger: jasmine.SpyObj<Logger>;
+//   let tokensRepository: jasmine.SpyObj<TokensRepository>;
 
-describe("tokensPersistenceHandler", () => {
-  let logger;
-  let tokensRepository;
+//   beforeEach(() => {
+//     logger = jasmine.createSpyObj<Logger>(['log']);
+//     tokensRepository = jasmine.createSpyObj<TokensRepository>(["insert", "update", "getByServer"]);
+//   });
 
-  beforeEach(() => {
-    logger = jasmine.createSpyObj("logger", ["log"]);
-    tokensRepository = jasmine.createSpyObj("tokensRepository", ["insert", "update", "getByServer"]);
-  });
+//   //////////////////
+//   // insert
+//   //////////////////
+//   it("insert calls repository.insert with passed parameters", async () => {
+//     // Arrange
+//     const server = lorem.word();
+//     const accessToken = random.uuid();
+//     const refreshToken = random.uuid();
+//     const dateCreated = date.recent();
+//     const expiryDate = date.future();
 
-  it("sets logger to .logger property", () => {
-    const handler = new TokensPersistenceHandler({ logger });
-    expect(handler.logger).toBe(logger);
-  });
+//     const handler = new TokensPersistenceHandler(logger, tokensRepository);
 
-  it("sets tokensRepository to .repository property", () => {
-    const handler = new TokensPersistenceHandler({ logger, tokensRepository });
-    expect(handler.repository).toBe(tokensRepository);
-  });
+//     // Act
+//     await handler.insert(server, accessToken, refreshToken, dateCreated, expiryDate);
 
-  it("sets logPrefix to [constructor.name] with space suffix", () => {
-    const handler = new TokensPersistenceHandler({ logger });
-    expect(handler.logPrefix).toBe("[TokensPersistenceHandler] ");
-  });
+//     // Assert
+//     expect(tokensRepository.insert)
+//       .toHaveBeenCalledWith(server, accessToken, refreshToken, dateCreated, expiryDate);
+//   });
 
-  //////////////////
-  // insert
-  //////////////////
-  it("insert calls repository.insert with passed parameters", async () => {
-    // Arrange
-    const server = faker.lorem.word();
-    const accessToken = faker.random.uuid();
-    const refreshToken = faker.random.uuid();
-    const dateCreated = faker.date.recent();
-    const expiryDate = faker.date.future();
+//   it("insert returns repository.insert as result", async () => {
+//     // Arrange
+//     const expectedResult = jasmine.createSpyObj<[RowDataPacket[], FieldPacket[]]>(null, null);
+//     tokensRepository.insert.and.returnValue(Promise.resolve(expectedResult))
+//     // tokensRepository = jasmine.createSpyObj<TokensRepository>({
+//     //   insert: expectedResult
+//     // });
 
-    const handler = new TokensPersistenceHandler({ logger, tokensRepository });
+//     const handler = new TokensPersistenceHandler(logger, tokensRepository);
 
-    // Act
-    await handler.insert(server, accessToken, refreshToken, dateCreated, expiryDate);
+//     // Act
+//     const result = await handler.insert(null, null, null, null, null);
 
-    // Assert
-    expect(tokensRepository.insert)
-      .toHaveBeenCalledWith(server, accessToken, refreshToken, dateCreated, expiryDate);
-  });
+//     // Assert
+//     expect(result).toBe(expectedResult);
+//   });
 
-  it("insert returns repository.insert as result", async () => {
-    // Arrange
-    const expectedResult = jasmine.createSpy("repoResult");
-    tokensRepository = jasmine.createSpyObj("tokensRepository", {
-      insert: expectedResult
-    });
+//   //////////////////
+//   // update
+//   //////////////////
+//   it("update calls repository.update with passed parameters", async () => {
+//     // Arrange
+//     const server = lorem.word();
+//     const accessToken = random.uuid();
+//     const refreshToken = random.uuid();
+//     const expiryDate = date.future();
 
-    const handler = new TokensPersistenceHandler({ logger, tokensRepository });
+//     const handler = new TokensPersistenceHandler(logger, tokensRepository);
 
-    // Act
-    const result = await handler.insert();
+//     // Act
+//     await handler.update(server, accessToken, refreshToken, expiryDate);
 
-    // Assert
-    expect(result).toBe(expectedResult);
-  });
+//     // Assert
+//     expect(tokensRepository.update)
+//       .toHaveBeenCalledWith(server, accessToken, refreshToken, expiryDate);
+//   });
 
-  //////////////////
-  // update
-  //////////////////
-  it("update calls repository.update with passed parameters", async () => {
-    // Arrange
-    const server = faker.lorem.word();
-    const accessToken = faker.random.uuid();
-    const refreshToken = faker.random.uuid();
-    const expiryDate = faker.date.future();
+//   it("update returns repository.update as result", async () => {
+//     // Arrange
+//     const expectedResult = jasmine.createSpy("repoResult");
+//     tokensRepository = jasmine.createSpyObj("tokensRepository", {
+//       update: expectedResult
+//     });
 
-    const handler = new TokensPersistenceHandler({ logger, tokensRepository });
+//     const handler = new TokensPersistenceHandler(logger, tokensRepository);
 
-    // Act
-    await handler.update(server, accessToken, refreshToken, expiryDate);
+//     // Act
+//     const result = await handler.update(null, null, null, null);
 
-    // Assert
-    expect(tokensRepository.update)
-      .toHaveBeenCalledWith(server, accessToken, refreshToken, expiryDate);
-  });
+//     // Assert
+//     expect(result).toBe(expectedResult);
+//   });
 
-  it("update returns repository.update as result", async () => {
-    // Arrange
-    const expectedResult = jasmine.createSpy("repoResult");
-    tokensRepository = jasmine.createSpyObj("tokensRepository", {
-      update: expectedResult
-    });
+//   //////////////////
+//   // getByServer
+//   //////////////////
+//   it("getByServer calls repository.getByServer with passed parameters", async () => {
+//     // Arrange
+//     const server = lorem.word();
+//     const handler = new TokensPersistenceHandler(logger, tokensRepository);
 
-    const handler = new TokensPersistenceHandler({ logger, tokensRepository });
+//     // Act
+//     await handler.getByServer(server);
 
-    // Act
-    const result = await handler.update();
+//     // Assert
+//     expect(tokensRepository.getByServer).toHaveBeenCalledWith(server);
+//   });
 
-    // Assert
-    expect(result).toBe(expectedResult);
-  });
+//   it("getByServer returns repository.getByServer as result", async () => {
+//     // Arrange
+//     const expectedResult = jasmine.createSpy("repoResult");
+//     tokensRepository = jasmine.createSpyObj("tokensRepository", {
+//       getByServer: expectedResult
+//     });
 
-  //////////////////
-  // getByServer
-  //////////////////
-  it("getByServer calls repository.getByServer with passed parameters", async () => {
-    // Arrange
-    const server = faker.lorem.word();
-    const handler = new TokensPersistenceHandler({ logger, tokensRepository });
+//     const handler = new TokensPersistenceHandler(logger, tokensRepository);
 
-    // Act
-    await handler.getByServer(server);
+//     // Act
+//     const result = await handler.getByServer(null);
 
-    // Assert
-    expect(tokensRepository.getByServer).toHaveBeenCalledWith(server);
-  });
-
-  it("getByServer returns repository.getByServer as result", async () => {
-    // Arrange
-    const expectedResult = jasmine.createSpy("repoResult");
-    tokensRepository = jasmine.createSpyObj("tokensRepository", {
-      getByServer: expectedResult
-    });
-
-    const handler = new TokensPersistenceHandler({ logger, tokensRepository });
-
-    // Act
-    const result = await handler.getByServer();
-
-    // Assert
-    expect(result).toBe(expectedResult);
-  });
-});
+//     // Assert
+//     expect(result).toBe(expectedResult);
+//   });
+// });

@@ -1,18 +1,26 @@
-'use strict';
+import { BotConfig } from 'config/bot/botConfig.js';
+import { ChatListenerConfigBase } from '../chatListenerConfigBase.js';
 
-module.exports = class TwitchChatListenerConfig {
-  constructor({ appConfig }) {
-    // TODO: Implement base class with shared properties
+export class TwitchChatListenerConfig extends ChatListenerConfigBase {
+  public clientId: string = "";
+  public clientSecret: string = "";
+  public accessToken: string = "";
+  public refreshToken: string = "";
+  public botNicks!: string[];
+  public channel: string = "";
+
+  constructor(botConfig: BotConfig) {
+    super(botConfig);
+
     // Defaults
-    this.token = null;
     this.enabled = false;
     this.name = "twitch";
 
-    if (!appConfig || !appConfig.bot || !appConfig.bot.chatListeners || appConfig.bot.chatListeners.length <= 0) {
+    if (!botConfig || !botConfig.chatListeners || botConfig.chatListeners.length <= 0) {
       return;
     }
-    const config = appConfig.bot.chatListeners.find(x => x.name == this.name);
-    if (!config || !config.settings) {
+    const config = Object.assign(this, botConfig.chatListeners.find(x => x.name == this.name));
+    if (!config) {
       return;
     }
 

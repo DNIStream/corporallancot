@@ -1,13 +1,13 @@
-'use strict';
-
-const NotImplemented = require("@errors/notImplemented");
+import { LoggingBase } from '../../../loggingBase.js';
+import { Logger } from '../../logging/logger.js';
+import { NotImplemented } from '../../../errors/notImplemented.js';
 
 // "Abstract" base class for persistence repositories
-module.exports = class RepositoryBase {
-  constructor(dbAdapter, logger, subClassName) {
-    this.logger = logger;
-    this.dbAdapter = dbAdapter;
-    this.logPrefix = `[${subClassName}] `;
+export class RepositoryBase extends LoggingBase {
+  constructor(logger: Logger) {
+    super(logger);
+
+    this.logger.log(`${this.logPrefix}Initialising repository`);
 
     // init() is called exactly once each time the repository is instantiated.
     // Repositories should therefore be injected as singletons to avoid multiple
@@ -38,7 +38,7 @@ module.exports = class RepositoryBase {
   // (insertNote(), getRandomNote(), getRandomNoteByContent() etc). This
   // makes sure that the database connection is ready for the command that
   // is being executed.
-  async init() {
-    throw NotImplemented;
+  protected async init(): Promise<void> {
+    throw new NotImplemented();
   }
 }

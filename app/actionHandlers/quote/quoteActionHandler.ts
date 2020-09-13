@@ -1,17 +1,22 @@
-'use strict';
+import { ActionHandlerBase } from '../actionHandlerBase.js';
+import { NotesPersistenceHandler } from '../../persistenceHandlers/notes/notesPersistenceHandler.js';
+import { Logger } from '../../services/logging/logger.js';
+import { IActionHandlerMessage } from '../actionHandlerMessage.js';
 
-const ActionHandlerBase = require("@actionHandlers/actionHandlerBase");
+export class QuoteActionHandler extends ActionHandlerBase {
+  public readonly persistenceHandler: NotesPersistenceHandler;
 
-module.exports = class QuoteActionHandler extends ActionHandlerBase {
-  constructor({ logger, notesPersistenceHandler }) {
+  constructor(logger: Logger, notesPersistenceHandler: NotesPersistenceHandler) {
     super(logger, "quote");
+
     this.persistenceHandler = notesPersistenceHandler;
+
     this.help = "`!quote <search>` finds a note (if `search` is omitted, I'll just find a random note).";
   }
 
-  async handle(actionHandlerMessage) {
+  public async handle(actionHandlerMessage: IActionHandlerMessage): Promise<string | null> {
     if (!actionHandlerMessage) {
-      return;
+      return null;
     }
 
     if (!actionHandlerMessage.data) {
@@ -40,4 +45,4 @@ module.exports = class QuoteActionHandler extends ActionHandlerBase {
       }
     }
   }
-};
+}

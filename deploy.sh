@@ -23,10 +23,10 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 DOCKER_REGISTRY=docker.pkg.github.com;
-DOCKER_PATH=${DOCKER_REGISTRY}/lewster32/corporallancot/;
-GIT_URL=git@github.com:lewster32/corporallancot.git;
-TEMP_GIT_DIR_NAME=corporallancot.temp/;
-BOT_IMAGE=${DOCKER_PATH}corporallancot;
+DOCKER_PATH=${DOCKER_REGISTRY}/lewster32/dni-bot/;
+GIT_URL=git@github.com:lewster32/dni-bot.git;
+TEMP_GIT_DIR_NAME=dni-bot.temp/;
+BOT_IMAGE=${DOCKER_PATH}dni-bot;
 DOCKER_USERNAME_FILE=docker-username;
 DOCKER_PASSWORD_FILE=docker-password;
 ENV_FILE=.env;

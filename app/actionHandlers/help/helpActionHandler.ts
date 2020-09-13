@@ -1,19 +1,22 @@
-'use strict';
+import { Logger } from '../../services/logging/logger.js';
+import { ActionHandlerBase } from '../actionHandlerBase.js';
+import { IActionHandlerMessage } from '../actionHandlerMessage.js';
 
-const ActionHandlerBase = require("@actionHandlers/actionHandlerBase");
+export class HelpActionHandler extends ActionHandlerBase {
+  private readonly actions: ActionHandlerBase[];
 
-module.exports = class HelpActionHandler extends ActionHandlerBase {
-  constructor({ logger, helpActions }) {
+  constructor(logger: Logger, helpActions: ActionHandlerBase[]) {
     super(logger, "help");
+
     this.actions = helpActions;
     this.help = "`!help` to show this message.";
   }
 
-  async handle(actionHandlerMessage) {
+  public async handle(actionHandlerMessage: IActionHandlerMessage): Promise<string | null> {
     if (!actionHandlerMessage) {
-      return;
+      return null;
     }
-    let helpText = this.actions.map(a => a.help).join("\r\n");
+    const helpText = this.actions.map(a => a.help).join("\r\n");
     return helpText;
   }
-};
+}

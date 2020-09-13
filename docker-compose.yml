@@ -3,7 +3,7 @@ version: "3.1"
 services:
   db:
     image: mariadb:10.5.4
-    container_name: corporallancot.db
+    container_name: dni-bot.db
     ports:
       - "${BOT_DB_LOCAL_PORT}:3306"
     restart: "no"
@@ -17,8 +17,8 @@ services:
       - ${BOT_DB_MOUNT_PATH}:/var/lib/mysql
       - ${BOT_DB_SQL_SCRIPTS_MOUNT_PATH}:/docker-entrypoint-initdb.d
   bot:
-    image: ${IMAGE_PREFIX}corporallancot:latest
-    container_name: corporallancot.bot
+    image: ${IMAGE_PREFIX}dni-bot:latest
+    container_name: dni-bot.bot
     depends_on:
       - db
     build:

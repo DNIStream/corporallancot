@@ -1,15 +1,22 @@
-'use strict';
+import { LoggingBase } from '../loggingBase.js';
+import { Logger } from '../services/logging/logger.js';
+import { ActionHandlerBase } from './actionHandlerBase.js';
+import { IActionHandlerMessage } from './actionHandlerMessage.js';
 
-module.exports = class ActionHandlerResolver {
-  constructor({ logger, actions }) {
+export class ActionHandlerResolver extends LoggingBase {
+  protected actions: ActionHandlerBase[];
+
+  constructor(logger: Logger, actions: ActionHandlerBase[]) {
+    super(logger);
     this.actions = actions;
-    this.logger = logger;
-    this.logPrefix = `[${this.constructor.name}] `;
   }
 
-  async resolve(actionHandlerMessage) {
+  public async resolve(actionHandlerMessage: IActionHandlerMessage): Promise<ActionHandlerBase> {
+
     const m = actionHandlerMessage;
+
     this.logger.log(`${this.logPrefix}Received: ${JSON.stringify(m)}`);
+
     if (m.isBangCommand === true && m.command === "generic") {
       throw new Error("The generic action handler cannot be resolved with a bang command");
     }

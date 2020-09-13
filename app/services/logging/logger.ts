@@ -1,10 +1,6 @@
-'use strict';
-
-module.exports = class Logger {
-  constructor() {
-  }
-
-  log(message, ...optionalParams) {
+export class Logger {
+  public log(message: string, ...optionalParams: unknown[]): void {
+    // TODO: Message prefix handling (class name?)
     // TODO: Use moment or similar to format the date
     // TODO: Replace console.log() with a logging tool
     message = `${new Date().toLocaleString("en-GB")}: ${message}`

@@ -1,18 +1,26 @@
-'use strict';
+import { RefreshableAuthProvider, RefreshConfig, StaticAuthProvider } from 'twitch-auth';
+import { ChatClient, PrivateMessage } from 'twitch-chat-client';
 
-const ChatListenerBase = require("@chatListeners/chatListenerBase");
+import { ChatListenerBase } from '../chatListenerBase.js';
+import { Logger } from '../../services/logging/logger.js';
+import { ActionHandlerResolver } from '../../actionHandlers/actionHandlerResolver.js';
+import { TwitchChatListenerConfig } from './twitchChatListenerConfig.js';
+import { TwitchMessageResolver } from './twitchMessageResolver.js';
+import { TokensPersistenceHandler } from '../../persistenceHandlers/tokens/tokensPersistenceHandler.js';
 
-module.exports = class TwitchChatListener extends ChatListenerBase {
-  constructor({ logger, actionHandlerResolver, twitchChatListenerConfig, twitchMessageResolver, tokensPersistenceHandler, twitchAuth, twitchChatClient }) {
+export class TwitchChatListener extends ChatListenerBase {
+  protected config: TwitchChatListenerConfig;
+  private persistenceHandler: TokensPersistenceHandler;
+  private chatClient: ChatClient;
+
+  constructor(logger: Logger, actionHandlerResolver: ActionHandlerResolver, twitchChatListenerConfig: TwitchChatListenerConfig, twitchMessageResolver: TwitchMessageResolver, tokensPersistenceHandler: TokensPersistenceHandler) {
     super(logger, actionHandlerResolver, twitchMessageResolver);
 
     this.config = twitchChatListenerConfig;
-    this.twitchChatClient = twitchChatClient;
-    this.twitchAuth = twitchAuth;
     this.persistenceHandler = tokensPersistenceHandler;
   }
 
-  async init() {
+  public async init(): Promise<void> {
     this.logger.log(`${this.logPrefix}Initialising - authenticating`);
 
     const clientId = this.config.clientId;
@@ -22,9 +30,9 @@ module.exports = class TwitchChatListener extends ChatListenerBase {
     const [tokenDataRows] = await this.persistenceHandler.getByServer(this.config.name);
     const tokenData = tokenDataRows[0];
 
-    let accessToken = "";
-    let refreshToken = "";
-    let expiryTimestamp = null;
+    let accessToken: string;
+    let refreshToken: string;
+    let expiryTimestamp: Date | null = null;
 
     if (tokenData) {
       this.logger.log(`${this.logPrefix}Tokens found in database`);
@@ -37,34 +45,33 @@ module.exports = class TwitchChatListener extends ChatListenerBase {
       accessToken = this.config.accessToken;
       refreshToken = this.config.refreshToken;
       // Insert initial record
-      await this.persistenceHandler.insert(this.config.name, accessToken, refreshToken, new Date(), expiryTimestamp);
+      await this.persistenceHandler.insert(this.config.name, accessToken, refreshToken, new Date(), null);
     }
 
     this.logger.log(`${this.logPrefix}Creating auth provider`);
 
-    const staticAuthProvider = new this.twitchAuth.StaticAuthProvider(clientId, accessToken);
-    const refreshConfig = {
+    const staticAuthProvider = new StaticAuthProvider(clientId, accessToken);
+    const refreshConfig = <RefreshConfig>{
       clientSecret,
       refreshToken: refreshToken,
       expiry: expiryTimestamp === null ? null : new Date(expiryTimestamp),
       onRefresh: async ({ accessToken, refreshToken, expiryDate }) => {
         this.logger.log(`${this.logPrefix}Token refreshed, saving`);
 
-        expiryDate = expiryDate === null ? null : expiryDate.getTime();
         await this.persistenceHandler.update(this.config.name, accessToken, refreshToken, expiryDate);
 
         this.logger.log(`${this.logPrefix}Token saved successfully`);
       }
     };
-    const authProvider = new this.twitchAuth.RefreshableAuthProvider(staticAuthProvider, refreshConfig);
+    const authProvider = new RefreshableAuthProvider(staticAuthProvider, refreshConfig);
 
-    this.chatClient = new this.twitchChatClient.ChatClient(authProvider, { channels: [this.config.channel] });
+    this.chatClient = new ChatClient(authProvider, { channels: [this.config.channel] });
 
     this.logger.log(`${this.logPrefix}Connecting to '${this.config.channel}' chat`);
     await this.chatClient.connect();
     this.logger.log(`${this.logPrefix}Connected to chat`);
 
-    this.chatClient.onPrivmsg(async (channel, user, message, msg) => {
+    this.chatClient.onMessage(async (channel: string, user: string, message: string, msg: PrivateMessage) => {
       try {
         await this.handleMessage(msg);
       } catch (e) {
@@ -75,11 +82,11 @@ module.exports = class TwitchChatListener extends ChatListenerBase {
     this.logger.log(`${this.logPrefix}Initialised successfully`);
   }
 
-  async handleMessage(twitchMessage) {
+  protected async handleMessage(twitchMessage: PrivateMessage): Promise<void> {
     await super.handleMessage(twitchMessage);
   }
 
-  async replyAction(twitchMessage, replyText) {
-    this.chatClient.say(twitchMessage.target.value, `@${twitchMessage._prefix.nick} ${replyText}`)
+  protected async replyAction(twitchMessage: PrivateMessage, replyText: string): Promise<void> {
+    this.chatClient.say(twitchMessage.target.value, `@${twitchMessage.prefix?.nick} ${replyText}`)
   }
 }

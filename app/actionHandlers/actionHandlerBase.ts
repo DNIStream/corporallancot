@@ -1,16 +1,28 @@
-'use strict';
+import { NotImplemented } from '../errors/notImplemented.js';
+import { LoggingBase } from '../loggingBase.js';
+import { Logger } from '../services/logging/logger.js';
+import { IActionHandlerMessage } from './actionHandlerMessage.js';
 
-const NotImplemented = require("@errors/notImplemented");
+export class ActionHandlerBase extends LoggingBase {
 
-module.exports = class ActionHandlerBase {
-  constructor(logger, name) {
+  public readonly name: string;
+
+  private _help: string = "";
+
+  public get help() : string {
+    return this._help;
+  }
+  public set help(v : string) {
+    this._help = v;
+  }
+
+  constructor(logger: Logger, name: string) {
+    super(logger);
     this.name = name;
-    this.logger = logger;
-    this.logPrefix = `[${this.constructor.name}] `;
     this.logger.log(`${this.logPrefix}Initialising '!${name}' action handler`);
   }
 
-  async handle() {
+  public async handle(actionHandlerMessage: IActionHandlerMessage): Promise<string | null> {
     throw NotImplemented;
   }
-};
+}

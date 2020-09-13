@@ -11,7 +11,7 @@ env:
   BOT_DB_LOCAL_PORT: 3306
 
 jobs:
-  corporallancot:
+  dni-bot:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2

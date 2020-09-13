@@ -1,17 +1,21 @@
-'use strict';
+import { ActionHandlerBase } from '../actionHandlerBase.js';
+import { Logger } from '../../services/logging/logger.js';
+import { NotesPersistenceHandler } from '../../persistenceHandlers/notes/notesPersistenceHandler.js';
+import { IActionHandlerMessage } from '../actionHandlerMessage.js';
 
-const ActionHandlerBase = require("@actionHandlers/actionHandlerBase");
+export class NotesActionHandler extends ActionHandlerBase {
+  private persistenceHandler: NotesPersistenceHandler;
 
-module.exports = class NotesActionHandler extends ActionHandlerBase {
-  constructor({ logger, notesPersistenceHandler }) {
+  constructor(logger: Logger, notesPersistenceHandler: NotesPersistenceHandler) {
     super(logger, "notes");
+
     this.persistenceHandler = notesPersistenceHandler;
     this.help = "`!notes [message]` records a note.";
   }
 
-  async handle(actionHandlerMessage) {
+  public async handle(actionHandlerMessage: IActionHandlerMessage): Promise<string | null> {
     if (!actionHandlerMessage) {
-      return;
+      return null;
     }
     const userID = actionHandlerMessage.userId;
     const channelID = actionHandlerMessage.channelId;
@@ -32,4 +36,4 @@ module.exports = class NotesActionHandler extends ActionHandlerBase {
       return "sorry, there's been an error!";
     }
   }
-};
+}

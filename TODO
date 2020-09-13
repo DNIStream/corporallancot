@@ -1,0 +1,17 @@
+
+DNI Bot:
+  TypeScript refactor:
+    ☐ Convert all classes to strongly types objects @started(20-09-14 18:42)
+    ☐ Get jasmine tests running
+      ☐ Fix up jasmine tests broken during refactor
+      ☐ Configure source maps for running jasmine tests
+    ☐ Fix up ESLint @started(20-09-21 19:36)
+    ☐ Configure source maps for debugging in node.js
+  Code TODO:
+    ☐ Allow for multiple persistence layers to be configured at the same time
+    ☐ Create domain objects and return these from the persistence handlers instead of MySQL objects
+  Bot changes:
+    ☐ Update bot default name / description
+
+
+

@@ -1,33 +1,34 @@
-'use strict';
+// import { Logger } from '../logging/logger';
+// import { Bot } from './bot';
+// import { BotConfig } from '../../config/bot/botConfig';
+// import { ChatListenerBase } from '../../chatListeners/chatListenerBase';
 
-const Bot = require("./bot");
+// describe("bot init()", function () {
+//   let logger: jasmine.SpyObj<Logger>;
+//   let botConfig: jasmine.SpyObj<BotConfig>;
+//   let chatListeners: jasmine.SpyObj<ChatListenerBase[]>;
 
-describe("bot init()", function () {
-  let logger;
-  let botConfig;
-  let chatListeners;
+//   beforeEach(() => {
+//     logger = jasmine.createSpyObj<Logger>(["log"]);
+//     botConfig = jasmine.createSpyObj<BotConfig>(null, {
+//       name: null,
+//       description: null,
+//       version: null
+//     });
+//     chatListeners = jasmine.createSpyObj<ChatListenerBase[]>(null, null);
+//   });
 
-  beforeEach(() => {
-    logger = jasmine.createSpyObj("logger", ["log"]);
-    botConfig = jasmine.createSpyObj("botConfig", null, {
-      name: null,
-      description: null,
-      version: null
-    });
-    chatListeners = jasmine.createSpy("chatListeners");
-  });
+//   it("calls init() for each chatListener", async () => {
+//     // Arrange
+//     const chatListener = jasmine.createSpyObj("chatListeners", ["init"]);
+//     chatListeners = [chatListener, chatListener];
+//     const bot = new Bot(logger, botConfig, chatListeners);
 
-  it("calls init() for each chatListener", async () => {
-    // Arrange
-    const chatListener = jasmine.createSpyObj("chatListeners", ["init"]);
-    chatListeners = [chatListener, chatListener];
-    const bot = new Bot({ logger, botConfig, chatListeners});
+//     // Act
+//     await bot.init();
 
-    // Act
-    await bot.init();
-
-    // Assert
-    expect(chatListener.init).toHaveBeenCalledTimes(2);
-  });
-});
+//     // Assert
+//     expect(chatListener.init).toHaveBeenCalledTimes(2);
+//   });
+// });
 

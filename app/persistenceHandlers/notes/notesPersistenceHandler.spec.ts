@@ -1,109 +1,92 @@
-'use strict';
+// import { NotesPersistenceHandler } from './notesPersistenceHandler';
+// import { lorem, random, date, internet } from 'faker';
+// import { Logger } from '../../services/logging/logger';
+// import { NotesRepository } from '../../services/db/repositories/notes/notesRepository';
+// import { FieldPacket, RowDataPacket } from 'mysql2/promise';
 
-const NotesPersistenceHandler = require("@persistenceHandlers/notes/notesPersistenceHandler");
-const faker = require('faker');
+// describe("notesPersistenceHandler", () => {
+//   let logger: jasmine.SpyObj<Logger>;
+//   let notesRepository: jasmine.SpyObj<NotesRepository>;
 
-describe("notesPersistenceHandler", () => {
-  const logger = {
-    log: function () { }
-  };
+//   beforeEach(() => {
+//     logger = jasmine.createSpyObj<Logger>(['log']);
+//     notesRepository = jasmine.createSpyObj<NotesRepository>(["insertNote"])
+//   });
 
-  it("sets logger to .logger property", () => {
-    const handler = new NotesPersistenceHandler({ logger });
-    expect(handler.logger).toBe(logger);
-  });
+//   //////////////////
+//   // insertNote
+//   //////////////////
+//   it("insertNote calls repository.insertNote with passed parameters", async () => {
+//     // Arrange
+//     const timestamp = date.recent();
+//     const userID = random.number();
+//     const channelID = random.number();
+//     const nick = internet.userName();
+//     const message = lorem.sentence();
+//     const server = lorem.word();
 
-  it("sets notesRepository to .repository property", () => {
-    const notesRepository = jasmine.createSpy("notesRepository");
-    const handler = new NotesPersistenceHandler({ logger, notesRepository });
-    expect(handler.repository).toBe(notesRepository);
-  });
+//     const handler = new NotesPersistenceHandler(logger, notesRepository);
 
-  it("sets logPrefix to [constructor.name] with space suffix", () => {
-    const handler = new NotesPersistenceHandler({ logger});
-    expect(handler.logPrefix).toBe("[NotesPersistenceHandler] ");
-  });
+//     // Act
+//     await handler.insertNote(timestamp, userID, channelID, nick, message, server);
 
-  //////////////////
-  // insertNote
-  //////////////////
-  it("insertNote calls repository.insertNote with passed parameters", async () => {
-    // Arrange
-    var notesRepository = jasmine.createSpyObj("notesRepository", ["insertNote"])
-    notesRepository.insertNote.and.returnValue(Promise.resolve());
+//     // Assert
+//     expect(notesRepository.insertNote)
+//       .toHaveBeenCalledWith(timestamp, userID, channelID, nick, message, server);
+//   });
 
-    const timestamp = faker.date.recent();
-    const userID = faker.random.number();
-    const channelID = faker.random.number();
-    const nick = faker.userName;
-    const message = faker.lorem.sentence();
-    const server = faker.lorem.word();
+//   it("insertNote returns repository.insertNote as result", async () => {
+//     // Arrange
+//     const expectedResult = jasmine.createSpyObj<[RowDataPacket[], FieldPacket[]]>(null, null);
+//     notesRepository.insertNote.and.returnValue(Promise.resolve(expectedResult))
 
-    const handler = new NotesPersistenceHandler({ logger, notesRepository });
+//     const handler = new NotesPersistenceHandler(logger, notesRepository);
 
-    // Act
-    await handler.insertNote(timestamp, userID, channelID, nick, message, server);
+//     // Act & Assert
+//     await expectAsync(handler.insertNote(null, null, null, null, null, null))
+//       .toBeResolvedTo(expectedResult);
+//   });
 
-    // Assert
-    expect(notesRepository.insertNote)
-      .toHaveBeenCalledWith(timestamp, userID, channelID, nick, message, server);
-  });
+//   //////////////////
+//   // getRandomNote
+//   //////////////////
+//   it("getRandomNote returns repository.getRandomNote as result", async () => {
+//     // Arrange
+//     const expectedResult = jasmine.createSpyObj<[RowDataPacket[], FieldPacket[]]>(null, null);
+//     notesRepository.getRandomNote.and.returnValue(Promise.resolve(expectedResult))
 
-  it("insertNote returns repository.insertNote as result", async () => {
-    // Arrange
-    const expectedResult = {};
-    var notesRepository = jasmine.createSpyObj("notesRepository", ["insertNote"])
-    notesRepository.insertNote.and.returnValue(expectedResult);
+//     const handler = new NotesPersistenceHandler(logger, notesRepository);
 
-    const handler = new NotesPersistenceHandler({ logger, notesRepository });
+//     // Act & Assert
+//     await expectAsync(handler.getRandomNote())
+//       .toBeResolvedTo(expectedResult);
+//   });
 
-    // Act & Assert
-    await expectAsync(handler.insertNote()).toBeResolvedTo(expectedResult);
-  });
+//   //////////////////
+//   // getRandomNoteByContent
+//   //////////////////
+//   it("getRandomNoteByContent calls repository.getRandomNoteByContent with passed parameters", async () => {
+//     // Arrange
+//     const searchPhrase = lorem.sentence();
+//     const handler = new NotesPersistenceHandler(logger, notesRepository);
 
-  //////////////////
-  // getRandomNote
-  //////////////////
-  it("getRandomNote returns repository.getRandomNote as result", async () => {
-    // Arrange
-    const expectedResult = {};
-    var notesRepository = jasmine.createSpyObj("notesRepository", ["getRandomNote"])
-    notesRepository.getRandomNote.and.returnValue(expectedResult);
+//     // Act
+//     await handler.getRandomNoteByContent(searchPhrase);
 
-    const handler = new NotesPersistenceHandler({ logger, notesRepository });
+//     // Assert
+//     expect(notesRepository.getRandomNoteByContent)
+//       .toHaveBeenCalledWith(searchPhrase);
+//   });
 
-    // Act & Assert
-    await expectAsync(handler.getRandomNote()).toBeResolvedTo(expectedResult);
-  });
+//   it("getRandomNoteByContent returns repository.getRandomNoteByContent as result", async () => {
+//     // Arrange
+//     const expectedResult = jasmine.createSpyObj<[RowDataPacket[], FieldPacket[]]>(null, null);
+//     notesRepository.getRandomNoteByContent.and.returnValue(Promise.resolve(expectedResult))
 
-  //////////////////
-  // getRandomNoteByContent
-  //////////////////
-  it("getRandomNoteByContent calls repository.getRandomNoteByContent with passed parameters", async () => {
-    // Arrange
-    var notesRepository = jasmine.createSpyObj("notesRepository", ["getRandomNoteByContent"])
-    notesRepository.getRandomNoteByContent.and.returnValue(Promise.resolve());
-    const searchPhrase = faker.lorem.sentence();
+//     const handler = new NotesPersistenceHandler(logger, notesRepository);
 
-    const handler = new NotesPersistenceHandler({ logger, notesRepository });
-
-    // Act
-    await handler.getRandomNoteByContent(searchPhrase);
-
-    // Assert
-    expect(notesRepository.getRandomNoteByContent)
-      .toHaveBeenCalledWith(searchPhrase);
-  });
-
-  it("getRandomNoteByContent returns repository.getRandomNoteByContent as result", async () => {
-    // Arrange
-    const expectedResult = {};
-    var notesRepository = jasmine.createSpyObj("notesRepository", ["getRandomNoteByContent"])
-    notesRepository.getRandomNoteByContent.and.returnValue(expectedResult);
-
-    const handler = new NotesPersistenceHandler({ logger, notesRepository });
-
-    // Act & Assert
-    await expectAsync(handler.getRandomNoteByContent()).toBeResolvedTo(expectedResult);
-  });
-});
+//     // Act & Assert
+//     await expectAsync(handler.getRandomNoteByContent(null))
+//       .toBeResolvedTo(expectedResult);
+//   });
+// });

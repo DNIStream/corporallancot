@@ -1,7 +1,14 @@
-'use strict';
+import { AppConfig } from '../app/appConfig.js';
+import { ChatListenerConfigBase } from '../../chatListeners/chatListenerConfigBase.js';
 
-module.exports = class BotConfig {
-  constructor({ appConfig, environment }) {
+export class BotConfig {
+
+  public readonly name: string;
+  public readonly description: string;
+  public readonly version: string;
+  public readonly chatListeners: ChatListenerConfigBase[] | null;
+
+  constructor(appConfig: AppConfig, environment: NodeJS.ProcessEnv) {
     const defaultName = "Corporal Lancot";
     const defaultDescription = "Halt!";
     const defaultVersion = "1.0.0";
@@ -17,21 +24,24 @@ module.exports = class BotConfig {
 
     // package.json settings take precedence over defaults
     if (environment) {
-      this.name = this.coalesce(environment.npm_package_name, this.name);
-      this.description = this.coalesce(environment.npm_package_description, this.description);
-      this.version = this.coalesce(environment.npm_package_version, this.version);
+
+      this.name = this.coalesce(environment['npm_package_name'], this.name);
+      this.description = this.coalesce(environment['npm_package_description'], this.description);
+      this.version = this.coalesce(environment['npm_package_version'], this.version);
     }
 
     // Config settings take precedence over package.json and defaults
-    if (appConfig.bot) {
-      this.name = this.coalesce(appConfig.bot.name, this.name);
-      this.description = this.coalesce(appConfig.bot.description, this.description);
-      this.version = this.coalesce(appConfig.bot.version, this.version);
-    }
+    // if (appConfig.config.bot) {
+    //   this.name = this.coalesce(appConfig.config.bot.name, this.name);
+    //   this.description = this.coalesce(appConfig.config.bot.description, this.description);
+    //   this.version = this.coalesce(appConfig.config.bot.version, this.version);
+    // }
+
+    this.chatListeners = null;
   }
 
-  coalesce(input, defaultValue) {
-    if (input === null || input === undefined || input.match(/^\s*$/g)) {
+  private coalesce(input: string | undefined, defaultValue: string): string {
+    if (input === undefined || input.match(/^\s*$/g)) {
       return defaultValue;
     }
     return input;
