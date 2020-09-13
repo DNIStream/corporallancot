@@ -1,4 +1,4 @@
-name: Corporal Lancot CI Build
+name: DNI Bot CI Build
 
 on:
   push:

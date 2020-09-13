@@ -1,4 +1,4 @@
-name: Corporal Lancot CD Build
+name: DNI Bot CD Build
 
 on:
   push:
